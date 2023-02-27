@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void generateBillHeader(char);
+void generateBillHeader(char *);
 void generateBillBody();
 void generataeBillFooter();
 void waiter();
@@ -18,7 +18,7 @@ struct itemsDetail
 struct orderDetail
 {
     int numberOfItems;
-    char costumerName[20];
+    char costumerName[30];
     char date;
     struct itemsDetail items[20]; 
     
@@ -41,7 +41,8 @@ int main()
     printf("\nWhat do you want me to do? ");
     scanf("%d", &choice);
 
-    waiter();
+    reception();
+    generateBillHeader(order.costumerName);
 
     /*switch (choice)
     {
@@ -57,7 +58,6 @@ int main()
 
 void waiter()
 {
-    system("clear");
     printf("\nEnter the no. of items ordered: ");
     scanf("%d", &order.numberOfItems);
 
@@ -78,14 +78,19 @@ void waiter()
 void reception()
 {
     printf("\nEnter the name of the costumer: ");
-    fgets(order.costumerName,20,stdin);  
+    fgetc(stdin);
+    fgets(order.costumerName,30,stdin);  
 }
 
-void generateBillHeader(char order.costumerName[], char order.date)
+void generateBillHeader(char costumerName[])
 {
     system("clear");
-    printf("--------------------Upullo Resturant and Bar--------------------");
-    printf("\nCustomer's name: %s", order.costumerName);
-    printf("\t\t\t\t\tDate: 2023-02-27\n");
-    printf("------------------------------------------------------------")
+    printf("\t-------------------------Upullo Resturant and Bar----------------------------------------");
+    printf("\n\tDate: 2023-02-27");
+    printf("\t\t\t\t\tCustomer's name: %s\n", order.costumerName);
+    printf("\t-----------------------------------------------------------------------------------------\n");
+    printf("\n\tItem Name");
+    printf("\t\t\tQuantity");
+    printf("\t\t    Price");
+    printf("\t\t    Total\n");
 }
