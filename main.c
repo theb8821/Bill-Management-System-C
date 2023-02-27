@@ -1,17 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
-void generateBillHeader(char *);
+void generateBillHeader();
 void generateBillBody();
-void generataeBillFooter();
+void generateBillFooter();
 void waiter();
 
 struct itemsDetail
 {
-    char itemName[50];
+    char itemName[20];
     float itemPrice;
     int itemQuantity;
+    float total;
 };
 
 struct orderDetail
@@ -20,10 +22,15 @@ struct orderDetail
     char costumerName[30];
     char date;
     struct itemsDetail items[20]; 
-    
+    float subTotal;
+    float grandTotal;
+    float discount;
+    float vat;
 };
 
 struct orderDetail order;
+
+float discountPercentage = 10;
 
 int main()
 {
@@ -46,8 +53,10 @@ int main()
     switch (choice)
     {
     case 1:
-        //waiter();
-        generateBillHeader(order.costumerName);
+        waiter();
+        generateBillHeader();
+        generateBillBody();
+        generateBillFooter();
         break;
     
     case 2:
@@ -83,17 +92,31 @@ void waiter()
     {
         fgetc(stdin);
         printf("\nEnter name of item no. %d: ", i + 1);
-        fgets(order.items[i].itemName,50, stdin);
-        
+        fgets(order.items[i].itemName,20, stdin);
+
+
+
+        /*
         printf("\nEnter its quantity: ");
+        quantityError:
         scanf("%d", &order.items[i].itemQuantity);
+        if (!isdigit(order.items[i].itemQuantity))
+        {
+            printf("Invalid! Try again: ");
+            getc(stdin);
+            goto quantityError;
+        }   
+        */
+       //this above area need to be fixed!!!!
+
 
         printf("\nEnter its price: ");
         scanf("%f", &order.items[i].itemPrice);
+        
     }  
 }
 
-void generateBillHeader(char costumerName[])
+void generateBillHeader()
 {
     system("clear");
     printf("\t-------------------------Upullo Resturant and Bar--------------------------------------\n");
@@ -103,5 +126,36 @@ void generateBillHeader(char costumerName[])
     printf("\n\tItem Name");
     printf("\t\t\tQuantity");
     printf("\t\tPrice");
-    printf("\t\t\tTotal\n");
+    printf("\t\t\tTotal\n\n");
+}
+
+void generateBillBody()
+{
+    getc(stdin);
+    for (int i = 0; i < order.numberOfItems; i++)
+    {
+        printf("\t%s", order.items[i].itemName);
+        printf("\t\t\t\t\t   %d", order.items[i].itemQuantity);
+        printf("\t\t\tRs.%.1f", order.items[i].itemPrice);
+
+        order.items[i].total = order.items[i].itemQuantity * order.items[i].itemPrice;
+        printf("\t\tRs.%.1f\n", order.items[i].total);
+
+        order.subTotal += order.items[i].total;
+    } 
+}
+
+void generateBillFooter()
+{
+    printf("\t\t\t\t\t\t\t\t\t\t------------------\n");
+    printf("\t\t\t\t\t\t\t\t\t\tSubtotal: %.1f\n", order.subTotal);
+
+    order.discount = order.subTotal * (discountPercentage / 100);
+    printf("\t\t\t\t\t\t\t\t\t\tDiscount: %.1f\n", order.discount);
+
+    order.vat = (order.subTotal - order.discount) * 0.13;
+    printf("\t\t\t\t\t\t\t\t         Value Added Tax: %.1f\n", order.vat);
+
+    order.grandTotal = order.subTotal - order.discount + order.vat;
+    printf("\t\t\t\t\t\t\t\t-------------Grand Total: %.1f\n", order.grandTotal);
 }
