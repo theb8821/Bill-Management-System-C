@@ -94,21 +94,8 @@ void waiter()
         printf("\nEnter name of item no. %d: ", i + 1);
         fgets(order.items[i].itemName,20, stdin);
 
-
-
-        /*
         printf("\nEnter its quantity: ");
-        quantityError:
         scanf("%d", &order.items[i].itemQuantity);
-        if (!isdigit(order.items[i].itemQuantity))
-        {
-            printf("Invalid! Try again: ");
-            getc(stdin);
-            goto quantityError;
-        }   
-        */
-       //this above area need to be fixed!!!!
-
 
         printf("\nEnter its price: ");
         scanf("%f", &order.items[i].itemPrice);
@@ -157,5 +144,5 @@ void generateBillFooter()
     printf("\t\t\t\t\t\t\t\t         Value Added Tax: %.1f\n", order.vat);
 
     order.grandTotal = order.subTotal - order.discount + order.vat;
-    printf("\t\t\t\t\t\t\t\t-------------Grand Total: %.1f\n", order.grandTotal);
+    printf("\n\t\t\t\t\t\t\t\t-------------Grand Total: %.1f\n", order.grandTotal);
 }
