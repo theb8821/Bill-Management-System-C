@@ -4,7 +4,7 @@
 #include <ctype.h>
 
 void reciption();
-void showBillRecord();
+void deleteBill();
 void searchBill();
 void generateBillHeader();
 void generateBillBody();
@@ -43,8 +43,8 @@ int main()
 
     printf("\t-------------------------Welcome to Bill Management System-------------------------");
     printf("\n\t1. New Bill.");
-    printf("\n\t2. Show Bill Records.");
-    printf("\n\t3. Search a Bill.");
+    printf("\n\t2. Search a Bill.");
+    printf("\n\t3. Delete a Bill Record.");
     printf("\n\t4. Exit.");
 
     printf("\n\tWhat do you want me to do? ");
@@ -57,16 +57,15 @@ int main()
     switch (choice)
     {
     case 1:
-        waiter();
-        saveBill();
+        reciption();
         break;
     
     case 2:
-        printf("Showing all records.\n");
+        printf("Search a bill.\n");
         break;
 
     case 3:
-        printf("Search a bill.\n");
+        printf("Delete a bill record.\n");
         break;
 
     case 4:
@@ -102,7 +101,6 @@ void waiter()
 
         printf("\nEnter its price: ");
         scanf("%f", &order.items[i].itemPrice);
-        
     }  
 }
 
@@ -135,8 +133,32 @@ void generateBillBody()
     } 
 }
 
+void saveBill()
+{
+    FILE *fp;
+    /*fp = fopen("bills_records.txt", "a+");
+    fprintf(fp, "\n%s", order.costumerName);
+    for(int i = 0; i < order.numberOfItems; i++)
+    {
+        fprintf(fp, "\n%s%i %f", order.items[i].itemName, order.items[i].itemQuantity, order.items[i].itemPrice);
+    }
+    fclose(fp);
+    */
+    fp = fopen("bills_records.txt","a+");
+    fwrite(&order,sizeof(order),1,fp);
+
+    if(fwrite != 0)
+    {
+        printf("\n\n\t\t\t\t\tBill have been sucessufully saved!");
+    }
+    else printf("\n\n\t\t\t\t\tSorry! Something went wrong :(");
+    fclose(fp);
+}
+
 void generateBillFooter()
 {
+    char choice;
+
     printf("\t\t\t\t\t\t\t\t\t\t------------------\n");
     printf("\t\t\t\t\t\t\t\t\t\tSubtotal: %.1f\n", order.subTotal);
 
@@ -148,19 +170,11 @@ void generateBillFooter()
 
     order.grandTotal = order.subTotal - order.discount + order.vat;
     printf("\n\t\t\t\t\t\t\t\t-------------Grand Total: %.1f\n", order.grandTotal);
-}
 
-void saveBill()
-{
-    FILE *fp;
-    fp = fopen("bills_records.txt", "a+");
-    fprintf(fp, "\n%s", order.costumerName);
-    for(int i = 0; i < order.numberOfItems; i++)
-    {
-        fprintf(fp, "\n%s%i %f", order.items[i].itemName, order.items[i].itemQuantity, order.items[i].itemPrice);
-    }
-    fclose(fp);
+    printf("\nDo you want to save the bill (y/n)?: ");
+    scanf("%c", &choice);
 
+    //saveBill();
 }
 
 void reciption()
