@@ -3,10 +3,14 @@
 #include <string.h>
 #include <ctype.h>
 
+void reciption();
+void showBillRecord();
+void searchBill();
 void generateBillHeader();
 void generateBillBody();
 void generateBillFooter();
 void waiter();
+void saveBill();
 
 struct itemsDetail
 {
@@ -54,9 +58,7 @@ int main()
     {
     case 1:
         waiter();
-        generateBillHeader();
-        generateBillBody();
-        generateBillFooter();
+        saveBill();
         break;
     
     case 2:
@@ -91,6 +93,7 @@ void waiter()
     for (int i = 0; i < order.numberOfItems; i++)
     {
         fgetc(stdin);
+        
         printf("\nEnter name of item no. %d: ", i + 1);
         fgets(order.items[i].itemName,20, stdin);
 
@@ -145,4 +148,25 @@ void generateBillFooter()
 
     order.grandTotal = order.subTotal - order.discount + order.vat;
     printf("\n\t\t\t\t\t\t\t\t-------------Grand Total: %.1f\n", order.grandTotal);
+}
+
+void saveBill()
+{
+    FILE *fp;
+    fp = fopen("bills_records.txt", "a+");
+    fprintf(fp, "\n%s", order.costumerName);
+    for(int i = 0; i < order.numberOfItems; i++)
+    {
+        fprintf(fp, "\n%s%i %f", order.items[i].itemName, order.items[i].itemQuantity, order.items[i].itemPrice);
+    }
+    fclose(fp);
+
+}
+
+void reciption()
+{
+    waiter();
+    generateBillHeader();
+    generateBillBody();
+    generateBillFooter();
 }
