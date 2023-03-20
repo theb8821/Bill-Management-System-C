@@ -1,2 +1,2 @@
 # Bill-Management-System---C
-Grade 12 - Computer Practical Project - Final 
+Self-Improvement Learning Project
