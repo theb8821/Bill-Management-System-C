@@ -34,6 +34,7 @@ struct orderDetail
 
 struct orderDetail order;
 FILE *fp;
+
 float discountPercentage = 10;
 
 int main()
