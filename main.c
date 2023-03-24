@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 
-void reciption();
 void deleteBill();
 void searchBill();
 void generateBillHeader();
@@ -33,7 +33,7 @@ struct orderDetail
 };
 
 struct orderDetail order;
-
+FILE *fp;
 float discountPercentage = 10;
 
 int main()
@@ -57,7 +57,10 @@ int main()
     switch (choice)
     {
     case 1:
-        reciption();
+        waiter();
+        generateBillHeader();
+        generateBillBody();
+        generateBillFooter();
         break;
     
     case 2:
@@ -107,8 +110,14 @@ void waiter()
 void generateBillHeader()
 {
     system("clear");
+
+    //getting system time
+    time_t t;
+    t = time(NULL);
+    struct tm tm = *localtime(&t);
+
     printf("\t-------------------------Upullo Resturant and Bar--------------------------------------\n");
-    printf("\n\tDate: 2023-02-27");
+    printf("\n\tDate: %d-%d-%d", tm.tm_year+1900, tm.tm_mon+1, tm.tm_mday);
     printf("\t\t\t\t\tCustomer's name: %s\n", order.costumerName);
     printf("\t---------------------------------------------------------------------------------------\n");
     printf("\n\tItem Name");
@@ -135,29 +144,23 @@ void generateBillBody()
 
 void saveBill()
 {
-    FILE *fp;
-    /*fp = fopen("bills_records.txt", "a+");
-    fprintf(fp, "\n%s", order.costumerName);
-    for(int i = 0; i < order.numberOfItems; i++)
-    {
-        fprintf(fp, "\n%s%i %f", order.items[i].itemName, order.items[i].itemQuantity, order.items[i].itemPrice);
-    }
-    fclose(fp);
-    */
-    fp = fopen("bills_records.txt","a+");
-    fwrite(&order,sizeof(order),1,fp);
+    fp = fopen("bills_records.txt", "a+");
+    fwrite(&order, sizeof(struct orderDetail), 1, fp);
 
     if(fwrite != 0)
     {
-        printf("\n\n\t\t\t\t\tBill have been sucessufully saved!");
+        printf("\n\n\t\t\t\t\tBill have been sucessufully saved!\n\n");
     }
-    else printf("\n\n\t\t\t\t\tSorry! Something went wrong :(");
+    else
+    {
+        printf("\n\n\t\t\t\t\tSorry! Something went wrong :(\n\n");
+    }
     fclose(fp);
 }
 
 void generateBillFooter()
 {
-    char choice;
+    char choice = 'y';
 
     printf("\t\t\t\t\t\t\t\t\t\t------------------\n");
     printf("\t\t\t\t\t\t\t\t\t\tSubtotal: %.1f\n", order.subTotal);
@@ -174,13 +177,8 @@ void generateBillFooter()
     printf("\nDo you want to save the bill (y/n)?: ");
     scanf("%c", &choice);
 
-    //saveBill();
-}
-
-void reciption()
-{
-    waiter();
-    generateBillHeader();
-    generateBillBody();
-    generateBillFooter();
+    if(choice == 'y')
+    {
+        saveBill();
+    }
 }
