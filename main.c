@@ -22,9 +22,10 @@ struct itemsDetail
 
 struct orderDetail
 {
+    int billNo;
     int numberOfItems;
     char costumerName[30];
-    char date;
+    char date[15];
     struct itemsDetail items[20]; 
     float subTotal;
     float grandTotal;
@@ -40,8 +41,14 @@ float discountPercentage = 10;
 int main()
 {
     system("clear");
-    int choice;
 
+    srand(time(NULL));
+    order.billNo = rand() % 1000;
+
+    int choice;
+    strcpy(order.date,__DATE__);
+
+    start:
     printf("\t-------------------------Welcome to Bill Management System-------------------------");
     printf("\n\t1. New Bill.");
     printf("\n\t2. Search a Bill.");
@@ -62,10 +69,12 @@ int main()
         generateBillHeader();
         generateBillBody();
         generateBillFooter();
+        saveBill();
+        //goto start;
         break;
     
     case 2:
-        printf("Search a bill.\n");
+        searchBill();
         break;
 
     case 3:
@@ -95,15 +104,16 @@ void waiter()
 
     for (int i = 0; i < order.numberOfItems; i++)
     {
-        fgetc(stdin);
+        getc(stdin);
         
         printf("\nEnter name of item no. %d: ", i + 1);
         fgets(order.items[i].itemName,20, stdin);
+        order.items[i].itemName[strcspn(order.items[i].itemName, "\n")] = 0;
 
         printf("\nEnter its quantity: ");
         scanf("%d", &order.items[i].itemQuantity);
 
-        printf("\nEnter its price: ");
+        printf("\nEnter its price (per unit): ");
         scanf("%f", &order.items[i].itemPrice);
     }  
 }
@@ -112,15 +122,13 @@ void generateBillHeader()
 {
     system("clear");
 
-    //getting system time
-    time_t t;
-    t = time(NULL);
-    struct tm tm = *localtime(&t);
 
-    printf("\t-------------------------Upullo Resturant and Bar--------------------------------------\n");
-    printf("\n\tDate: %d-%d-%d", tm.tm_year+1900, tm.tm_mon+1, tm.tm_mday);
+
+    printf("\t-------------------------Upullo Resturant and Bar----------------------------------------\n");
+    printf("\tBill NO: %d\n", order.billNo);
+    printf("\n\tDate: %s", order.date);
     printf("\t\t\t\t\tCustomer's name: %s\n", order.costumerName);
-    printf("\t---------------------------------------------------------------------------------------\n");
+    printf("\t-----------------------------------------------------------------------------------------\n");
     printf("\n\tItem Name");
     printf("\t\t\tQuantity");
     printf("\t\tPrice");
@@ -129,11 +137,10 @@ void generateBillHeader()
 
 void generateBillBody()
 {
-    getc(stdin);
     for (int i = 0; i < order.numberOfItems; i++)
     {
         printf("\t%s", order.items[i].itemName);
-        printf("\t\t\t\t\t   %d", order.items[i].itemQuantity);
+        printf("\t\t\t\t   %d", order.items[i].itemQuantity);
         printf("\t\t\tRs.%.1f", order.items[i].itemPrice);
 
         order.items[i].total = order.items[i].itemQuantity * order.items[i].itemPrice;
@@ -145,23 +152,31 @@ void generateBillBody()
 
 void saveBill()
 {
+    fgetc(stdin);
+    char choice;
+    
+    printf("\nDo you want to save the bill (y/n)?: ");
+    scanf("%c", &choice);
+
+    if(choice == 'y')
+    {
     fp = fopen("bills_records.txt", "a+");
     fwrite(&order, sizeof(struct orderDetail), 1, fp);
 
     if(fwrite != 0)
     {
-        printf("\n\n\t\t\t\t\tBill have been sucessufully saved!\n\n");
+        printf("\n\n\t\t\t\t\tBill has been sucessufully saved :)\n\n");
     }
     else
     {
-        printf("\n\n\t\t\t\t\tSorry! Something went wrong :(\n\n");
+        printf("\n\n\t\t\t\t\tSorry! Something went wrong :( Bill not saved.\n\n");
     }
     fclose(fp);
+    }
 }
 
 void generateBillFooter()
 {
-    char choice = 'y';
 
     printf("\t\t\t\t\t\t\t\t\t\t------------------\n");
     printf("\t\t\t\t\t\t\t\t\t\tSubtotal: %.1f\n", order.subTotal);
@@ -173,13 +188,32 @@ void generateBillFooter()
     printf("\t\t\t\t\t\t\t\t         Value Added Tax: %.1f\n", order.vat);
 
     order.grandTotal = order.subTotal - order.discount + order.vat;
-    printf("\n\t\t\t\t\t\t\t\t-------------Grand Total: %.1f\n", order.grandTotal);
+    printf("\n\t\t\t\t\t\t\t\t-------------Grand Total: %.1f\n\n", order.grandTotal);
+}
 
-    printf("\nDo you want to save the bill (y/n)?: ");
-    scanf("%c", &choice);
+void searchBill(){
+    int found = 0;
+    int billNO;
 
-    if(choice == 'y')
+    printf("Enter the bill number: ");
+    scanf("%d", &billNO);
+    fgetc(stdin);
+
+    fp = fopen("bills_records.txt","r");
+
+    while(fread(&order, sizeof(struct orderDetail), 1, fp))
     {
-        saveBill();
+            if(!(billNO - order.billNo))
+            {
+            generateBillHeader();
+            generateBillBody();
+            generateBillFooter();
+            found = 1;
+            }
+        
     }
+    if(!found){
+        printf("Sorry! The bill %d does not exists in our system :(\n", billNO);
+    }
+    fclose(fp);
 }
