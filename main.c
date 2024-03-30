@@ -217,3 +217,27 @@ void searchBill(){
     }
     fclose(fp);
 }
+
+/*
+void deleteBill()
+{
+    int billNO;
+
+    printf("Enter the bill number: ");
+    scanf("%d", &billNO);
+    fgetc(stdin);
+
+    readdata();  //reads all data stored in the file
+    fp = fopen("bills_records.txt","w");
+
+    for (int w = 0; w < t; w++)
+    {
+        if(order.billNo != billNO)
+        {
+            fwrite(&a[w],sizeof(a[w]),1,file);
+        }
+    }
+    fclose(fp);
+    printf("Bill has been sucessesfully deleted :)\n");
+ }
+ */
