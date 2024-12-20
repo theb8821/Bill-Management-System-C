@@ -1,7 +1,7 @@
 
 # Billing Management System
 
-This repository contains a C program designed to manage billing operations efficiently. The system is ideal for small businesses such as restaurants or retail stores, providing functionalities like bill generation, storage, and searching.
+This repository contains a C program designed to manage billing operations efficiently. The system is ideal for small businesses such as restaurants or retail stores, providing functionalities like bill generation, storage, and searching. The deleting function is still to be implemented.
 
 ## Features
 
@@ -75,6 +75,6 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ### Author
 
-Developed by [Your Name].
+Developed by Bishal Subedi.
 
 ---
