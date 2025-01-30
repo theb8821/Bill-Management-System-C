@@ -34,8 +34,9 @@ This repository contains a C program designed to manage billing operations effic
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/your-repo-name.git
-   cd your-repo-name
+   git clone https://github.com/theb8821/Bill-Management-System-C.git
+   cd Bill-Management-System-C
+
    ```
 2. Compile the program:
    ```bash
