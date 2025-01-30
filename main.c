@@ -26,7 +26,7 @@ struct orderDetail
     int numberOfItems;
     char costumerName[30];
     char date[15];
-    struct itemsDetail items[20]; 
+    struct itemsDetail items[20];
     float subTotal;
     float grandTotal;
     float discount;
@@ -59,11 +59,11 @@ int main()
     printf("\n\t4. Exit.");
 
     printf("\n\tWhat do you want me to do? ");
-    
+
     selectionError:
     scanf("%d", &choice);
     getc(stdin);
-    
+
 
     switch (choice)
     {
@@ -75,7 +75,7 @@ int main()
         saveBill();
         goto start;
         break;
-    
+
     case 2:
         searchBill();
         goto start;
@@ -102,7 +102,7 @@ int main()
 void waiter()
 {
     printf("\n\tEnter the name of the costumer: ");
-    fgets(order.costumerName,30,stdin); 
+    fgets(order.costumerName,30,stdin);
 
     printf("\n\tEnter the no. of items ordered: ");
     scanf("%d", &order.numberOfItems);
@@ -110,7 +110,7 @@ void waiter()
     for (int i = 0; i < order.numberOfItems; i++)
     {
         getc(stdin);
-        
+
         printf("\n\tEnter name of item no. %d: ", i + 1);
         fgets(order.items[i].itemName,20, stdin);
         order.items[i].itemName[strcspn(order.items[i].itemName, "\n")] = 0;
@@ -120,7 +120,7 @@ void waiter()
 
         printf("\n\tEnter its price (per unit): ");
         scanf("%f", &order.items[i].itemPrice);
-    }  
+    }
 }
 
 void generateBillHeader()
@@ -150,14 +150,14 @@ void generateBillBody()
         printf("\t\t\tRs.%.1f\n", order.items[i].total);
 
         order.subTotal += order.items[i].total;
-    } 
+    }
 }
 
 void saveBill()
 {
     fgetc(stdin);
     char choice;
-    
+
     start:
     printf("\n\tDo you want to save the bill (y/n)?: ");
     scanf("%c", &choice);
@@ -167,7 +167,7 @@ void saveBill()
     fp = fopen("bills_records.txt", "a+");
     fwrite(&order, sizeof(struct orderDetail), 1, fp);
 
-    if(fwrite != 0)
+    if(&fwrite != 0)
     {
         printf("\n\tBill has been sucessufully saved :)\n");
     }
@@ -183,7 +183,7 @@ void saveBill()
     {
         goto start;
     }
-    
+
     fgetc(stdin);
     printf("\tPress ENTER KEY to continue: ");
     getc(stdin);
@@ -226,7 +226,7 @@ void searchBill(){
             generateBillBody();
             generateBillFooter();
             found = 1;
-            }   
+            }
     }
     if(!found){
         if(billNO != 0)
@@ -273,7 +273,7 @@ void deleteBill()
             order.
             found = 1;
             }
-        
+
     }
     if(!found){
         printf("Sorry! The bill no.%d does not exists in our system :(\n", billNO);
@@ -282,6 +282,6 @@ void deleteBill()
         printf("Bill has been sucessesfully deleted :)\n");
     }
     fclose(fp);
-    
+
  }
  */
